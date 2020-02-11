@@ -35,3 +35,46 @@ router.post("/:id/comments", (req, res) => {
     }
 })
 
+router.get("/", (req,res) => {
+    db.find()
+    .then(posts => {
+        res.status(200).send(posts)
+    })
+    .catch( err => {
+        res.status(500).send({ error: "The posts information could not be retrieved." })
+    })
+})
+
+router.get("/:id", (req, res) => {
+    const {id} = req.params;
+
+    db.findById(id)
+    .then( post => {
+        if(post){
+            res.status(200).send(post)
+        } else {
+            res.status(404).send({ message: "The post with the specified ID does not exist." })
+        }
+    })
+    .catch( err => {
+        res.status(500).send({ error: "The post information could not be retrieved." })
+    })
+})
+
+
+router.delete("/:id", (req, res) => {
+    const {id} = req.params;
+    db.remove(id)
+    .then( deleted => {
+        if(deleted){
+            res.status(204)
+        } else {
+            res.status(404).send({ message: "The post with the specified ID does not exist." })
+        }
+    })
+    .catch(err => {
+        res.status(500).send({ error: "The post could not be removed" })
+    })
+})
+
+module.exports = router;
