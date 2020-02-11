@@ -62,7 +62,7 @@ router.get("/:id", (req, res) => {
 })
 
 router.get("/:id/comments", (req,res) => {
-    db.findCommentById(req.params.id)
+    db.findPostComments(req.params.id)
     .then( post => {
         if(post){
             res.status(200).send(post)
@@ -74,6 +74,32 @@ router.get("/:id/comments", (req,res) => {
         res.status(500).send({ error: "The comments information could not be retrieved." })
     })
 })
+
+ router.put("/;id", (req, res) => {
+    
+    if(!req.body.title || req.body.contents){
+        
+        res.status(400).send({ errorMessage: "Please provide title and contents for the post." })
+    
+    } else {
+
+        const updated = db.findById(req.params.id)
+        .then( changes => changes)
+        .catch( err => console.log(err))
+        
+        db.update(req.params.id, req.body)
+        .then( post => {
+            if(post){
+                res.status(200).send(updated)
+            } else {
+                res.status(404).send({ message: "The post with the specified ID does not exist." })
+            }
+        })
+        .catch(err => {
+            res.status(500).send({ error: "The post information could not be modified." })
+        })
+    }  
+ })
 
 
 router.delete("/:id", (req, res) => {
