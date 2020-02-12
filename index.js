@@ -12,7 +12,7 @@ server.use("/", (req,res) => {
 })
 
 
-const port = 5000
+const port = 8000
 server.listen(port, () => {
-    console.log(`server is running on port ${port}`)
-});
+    console.log(`\n server is running on port ${port} \n`)
+});  
